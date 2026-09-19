@@ -352,7 +352,8 @@ def render(rep: Report, a) -> None:
             print(f"setting   {label:15} {'ON ' if s['on'] else 'OFF'}  {s['source']}")
     if rep.template:
         print(f"setting   commit.template  ON   {rep.template} contains a trailer")
-    print()
+    if rep.settings or rep.template:
+        print()
     n = len(rep.commits)
     pushed = sum(c.pushed for c in rep.commits)
     print(f"commits   {rep.scanned} scanned on {rep.refs} refs  ->  "
