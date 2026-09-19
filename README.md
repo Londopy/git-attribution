@@ -13,6 +13,8 @@
 
 <img src="docs/demo.png" alt="git-attribution output: the trailer setting, tainted commits split into pushed and local, the rewrite plan and the guard" width="900">
 
+<sub>Part of the rollcall family — tools that make what Claude Code does silently legible: [skill-rollcall](https://github.com/Londopy/skill-rollcall) · [mcp-rollcall](https://github.com/Londopy/mcp-rollcall) · [settings-effective](https://github.com/Londopy/settings-effective) · **git-attribution**</sub>
+
 </div>
 
 ---
