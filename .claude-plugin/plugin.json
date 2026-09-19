@@ -1,0 +1,14 @@
+{
+  "name": "git-attribution",
+  "displayName": "Git Attribution",
+  "version": "1.0.0",
+  "description": "Find and remove AI co-author attribution from a repo: is Claude Code still adding the trailer, which commits already carry one, rewrite them with a backup, and block pushes that would bring it back.",
+  "author": {
+    "name": "Londopy",
+    "url": "https://github.com/Londopy"
+  },
+  "homepage": "https://github.com/Londopy/git-attribution",
+  "repository": "https://github.com/Londopy/git-attribution",
+  "license": "MIT",
+  "keywords": ["claude-code", "git", "co-authored-by", "attribution", "contributors", "filter-branch", "plugin"]
+}

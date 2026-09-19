@@ -1,0 +1,17 @@
+{
+  "name": "git-attribution",
+  "owner": {
+    "name": "Londopy",
+    "url": "https://github.com/Londopy"
+  },
+  "description": "Marketplace for the git-attribution plugin.",
+  "plugins": [
+    {
+      "name": "git-attribution",
+      "source": "./",
+      "description": "Find and remove AI co-author attribution from a repo's history, switch it off, and guard against it coming back.",
+      "version": "1.0.0",
+      "keywords": ["claude-code", "git", "co-authored-by", "attribution"]
+    }
+  ]
+}
