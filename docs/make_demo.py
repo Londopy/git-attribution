@@ -46,14 +46,14 @@ def commit(repo: Path, n: int, message: str) -> None:
 def fixture(tmp: Path) -> Path:
     remote = tmp / "remote.git"
     git(tmp, "init", "-q", "--bare", str(remote))
-    repo = tmp / "nexium"
+    repo = tmp / "tidewatch"
     git(tmp, "init", "-q", "-b", "main", str(repo))
-    git(repo, "config", "user.name", "Londopy")
-    git(repo, "config", "user.email", "Londopy@users.noreply.github.com")
+    git(repo, "config", "user.name", "Mara Quill")
+    git(repo, "config", "user.email", "mara@example.com")
     git(repo, "remote", "add", "origin", str(remote))
-    commit(repo, 1, "Initial parser and lexer\n")
-    commit(repo, 2, "Add match expressions\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\n")
-    commit(repo, 3, "Fix range check in the borrow pass\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\n")
+    commit(repo, 1, "Initial tide model and CLI\n")
+    commit(repo, 2, "Add harmonic constituents table\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\n")
+    commit(repo, 3, "Fix DST offset in the tide clock\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\n")
     git(repo, "push", "-q", "origin", "main")
     commit(repo, 4, "Docs: getting started\n\n\U0001F916 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\n")
     commit(repo, 5, "Wire the CI matrix\n\nCo-authored-by: Codex <noreply@openai.com>\n")
@@ -73,7 +73,7 @@ def main() -> None:
         with redirect_stdout(buf):
             attribution.main(["--repo", str(repo), "--claude-home", str(home), "--fix"])
         out = (buf.getvalue()
-               .replace(str(repo), "~/Code/nexium").replace(str(home), "~/.claude")
+               .replace(str(repo), "~/Code/tidewatch").replace(str(home), "~/.claude")
                .replace("\\", "/").replace("\U0001F916 ", ""))   # tofu in most mono fonts
 
     lines = ["$ python attribution.py --fix", ""] + out.rstrip().splitlines()
