@@ -56,7 +56,8 @@ def fixture(tmp: Path) -> Path:
     commit(repo, 3, "Fix range check in the borrow pass\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\n")
     git(repo, "push", "-q", "origin", "main")
     commit(repo, 4, "Docs: getting started\n\n\U0001F916 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>\n")
-    commit(repo, 5, "Release 0.4.0\n")
+    commit(repo, 5, "Wire the CI matrix\n\nCo-authored-by: Codex <noreply@openai.com>\n")
+    commit(repo, 6, "Release 0.4.0\n")
     home = tmp / "home"
     home.mkdir()
     (home / "settings.json").write_text(json.dumps({"attribution": {"commit": "", "pr": ""}}))
@@ -93,7 +94,7 @@ def main() -> None:
         color = FG
         if line.startswith("$ "):
             color = GREEN
-        elif line.startswith(("setting", "commits", "guard", "plan", "prs")):
+        elif line.startswith(("host", "claude", "template", "setting", "commits", "guard", "plan", "prs")):
             color = BLUE
         elif re.match(r"\s{2}[0-9a-f]{7}\s.*\spushed\s", line):
             color = RED

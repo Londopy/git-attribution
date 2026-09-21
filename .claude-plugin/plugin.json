@@ -1,8 +1,8 @@
 {
   "name": "git-attribution",
   "displayName": "Git Attribution",
-  "version": "1.0.0",
-  "description": "Find and remove AI co-author attribution from a repo: is Claude Code still adding the trailer, which commits already carry one, rewrite them with a backup, and block pushes that would bring it back.",
+  "version": "1.1.0",
+  "description": "Find and remove AI co-author attribution from git history - the Co-Authored-By trailers and Generated-with footers Claude Code, Codex, Copilot, Cursor, Gemini, Devin and Aider add - and guard against it coming back. Runs from any Agent Skills host.",
   "author": {
     "name": "Londopy",
     "url": "https://github.com/Londopy"
@@ -10,5 +10,17 @@
   "homepage": "https://github.com/Londopy/git-attribution",
   "repository": "https://github.com/Londopy/git-attribution",
   "license": "MIT",
-  "keywords": ["claude-code", "git", "co-authored-by", "attribution", "contributors", "filter-branch", "plugin"]
+  "keywords": [
+    "agent-skills",
+    "attribution",
+    "claude-code",
+    "co-authored-by",
+    "codex",
+    "contributors",
+    "copilot",
+    "cursor",
+    "filter-branch",
+    "git",
+    "plugin"
+  ]
 }

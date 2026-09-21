@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0 - 2026-09-21
+
+- Host awareness: the report's new `host` line names the agent it ran under (from
+  `CLAUDECODE`, `CODEX_SANDBOX`, `CURSOR_AGENT`, `GEMINI_CLI`) and where that agent's
+  attribution switch lives. Codex's is a ChatGPT workspace policy fetched at runtime,
+  so there is nothing on disk to flip and the guard is the local control; Cursor,
+  Gemini and Copilot have no documented switch. Claude Code's settings lines are now
+  labelled `claude` and printed under every host.
+- JSON gains `host` and `host_note`.
+- SKILL.md rewritten for any host, with spec `license`, `compatibility` and `metadata`
+  frontmatter; `agents/openai.yaml` added for Codex / ChatGPT UI metadata; README
+  install matrix for Codex, Cursor, Gemini CLI, Copilot and OpenCode.
+- Demo fixture gains a Codex-signed commit. 4 new tests (40 total).
+
 ## 1.0.0 - 2026-09-19
 
 Initial release.

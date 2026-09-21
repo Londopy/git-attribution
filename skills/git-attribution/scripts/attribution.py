@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """git-attribution: find and remove AI co-author attribution from a repo's history.
 
-Claude Code (and Copilot, Codex, Cursor, ...) append a `Co-Authored-By:` trailer to
+Claude Code, Codex, Copilot, Cursor and the rest append a `Co-Authored-By:` trailer to
 commit messages. GitHub reads the trailer and puts the agent in your contributor
 graph. This tells you whether the trailer is still being added on this machine,
 lists every commit that already carries one, and rewrites them on request.
@@ -43,6 +43,17 @@ AGENTS = {
     "devin":   r"\bdevin\b|cognition",
     "aider":   r"\baider\b",
 }
+# Where each host's attribution switch lives, if anywhere. Claude Code: a settings key
+# this script reads and can flip. Codex: a ChatGPT workspace policy fetched at runtime
+# (codex-rs/ext/git-attribution), nothing on disk. Others: no documented switch. The
+# pre-push guard is the local control that covers every one of them.
+HOSTS = {
+    "claude":  {"env": ["CLAUDECODE"], "switch": "settings.json attribution.commit / attribution.pr (read below)"},
+    "codex":   {"env": ["CODEX_SANDBOX", "CODEX_SANDBOX_NETWORK_DISABLED"],
+                "switch": "a ChatGPT workspace policy fetched at runtime - nothing local to flip; the guard is the control"},
+    "cursor":  {"env": ["CURSOR_AGENT"], "switch": "no documented local switch; the guard is the control"},
+    "gemini":  {"env": ["GEMINI_CLI"], "switch": "no documented local switch; the guard is the control"},
+}
 TRAILER = re.compile(r"^\s*co-authored-by:\s*(?P<who>.+?)\s*$", re.I)
 FOOTER = re.compile(r"^\s*(?:\U0001F916\s*)?(?:generated|made|created|written)\s+with\b.*$", re.I)
 HOOK_MARK = "# git-attribution guard"
@@ -50,6 +61,15 @@ HOOK_MARK = "# git-attribution guard"
 
 def agent_re(agents: list[str]) -> re.Pattern:
     return re.compile("|".join(f"(?:{AGENTS[a]})" for a in agents), re.I)
+
+
+def detect_host() -> tuple[str | None, str | None]:
+    """(host key, the env var that gave it away) or (None, None); best effort."""
+    for key, spec in HOSTS.items():
+        for var in spec["env"]:
+            if os.environ.get(var):
+                return key, var
+    return None, None
 
 
 # --------------------------------------------------------------------------- model
@@ -69,6 +89,8 @@ class Report:
     repo: str
     branch: str = ""
     identity: str = ""
+    host: str = ""                                   # agent this ran under, when detectable
+    host_note: str = ""                              # where that host's switch lives
     settings: dict = field(default_factory=dict)     # commit/pr -> {on, source}
     template: str | None = None                      # commit.template that adds a trailer
     scanned: int = 0
@@ -346,13 +368,15 @@ def render(rep: Report, a) -> None:
     if rep.branch or rep.identity:
         print(f"                 {rep.branch}  {rep.identity}".rstrip())
     print()
+    if rep.host:
+        print(f"host      {rep.host}  {rep.host_note}")
     for k, label in (("commit", "commit trailer"), ("pr", "PR footer")):
         s = rep.settings.get(k)
         if s:
-            print(f"setting   {label:15} {'ON ' if s['on'] else 'OFF'}  {s['source']}")
+            print(f"claude    {label:15} {'ON ' if s['on'] else 'OFF'}  {s['source']}")
     if rep.template:
-        print(f"setting   commit.template  ON   {rep.template} contains a trailer")
-    if rep.settings or rep.template:
+        print(f"template  commit.template  ON   {rep.template} contains a trailer")
+    if rep.settings or rep.template or rep.host:
         print()
     n = len(rep.commits)
     pushed = sum(c.pushed for c in rep.commits)
@@ -390,7 +414,7 @@ def render(rep: Report, a) -> None:
         if n:
             hints.append("--fix to plan a rewrite")
         if rep.settings.get("commit", {}).get("on"):
-            hints.append("--fix to switch the trailer off")
+            hints.append("--fix to switch Claude Code's trailer off")
         if rep.guard == "none":
             hints.append("--guard --apply to block future pushes")
         if hints:
@@ -442,6 +466,10 @@ def main(argv=None) -> int:
     name = git(root, "config", "--get", "user.name", check=False).strip()
     mail = git(root, "config", "--get", "user.email", check=False).strip()
     rep.identity = f"{name} <{mail}>" if name or mail else "(no user.name / user.email)"
+    host, var = detect_host()
+    if host:
+        rep.host = host
+        rep.host_note = f"({var} set) attribution switch: {HOSTS[host]['switch']}"
     if not a.no_settings:
         rep.settings = attribution_state(settings_files(root, claude_home))
         rep.template = commit_template(root, rx)

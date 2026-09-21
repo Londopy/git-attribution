@@ -1,0 +1,5 @@
+# Optional Codex / ChatGPT metadata (developers.openai.com/codex/skills). Other hosts ignore it.
+interface:
+  display_name: "Git attribution"
+  short_description: "Find and remove AI co-author trailers; guard against them"
+  default_prompt: "Check this repo for AI co-author attribution and tell me which commits carry it."

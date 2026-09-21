@@ -9,9 +9,14 @@
     {
       "name": "git-attribution",
       "source": "./",
-      "description": "Find and remove AI co-author attribution from a repo's history, switch it off, and guard against it coming back.",
-      "version": "1.0.0",
-      "keywords": ["claude-code", "git", "co-authored-by", "attribution"]
+      "description": "Find and remove AI co-author attribution (Claude Code, Codex, Copilot, Cursor, Gemini, ...) from git history; guard against it coming back.",
+      "version": "1.1.0",
+      "keywords": [
+        "claude-code",
+        "git",
+        "co-authored-by",
+        "attribution"
+      ]
     }
   ]
 }
